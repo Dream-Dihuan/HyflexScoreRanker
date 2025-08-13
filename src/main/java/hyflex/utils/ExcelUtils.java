@@ -3,7 +3,6 @@ package hyflex.utils;
 import cn.afterturn.easypoi.excel.ExcelExportUtil;
 import cn.afterturn.easypoi.excel.entity.ExportParams;
 import hyflex.entity.ExcelOutputEntity;
-import hyflex.entity.HyperHeuristicInfo;
 import org.apache.poi.ss.usermodel.Workbook;
 
 import java.io.File;
@@ -21,7 +20,7 @@ public class ExcelUtils {
     public static void generateExcelFile(List<ExcelOutputEntity> excelOutputEntities, String outputPath) {
         outputPath=outputPath+ File.separator + "rankerResult.xlsx";
 
-        ExportParams exportParams = new ExportParams("问题实例信息", "数据表");
+        ExportParams exportParams = new ExportParams("运行结果信息", "数据表");
 
         Workbook workbook = ExcelExportUtil.exportExcel(exportParams, ExcelOutputEntity.class, excelOutputEntities);
 
@@ -43,12 +42,14 @@ public class ExcelUtils {
     }
 
 
+
+
     /**
      * 将ExtractScoreItemByHyperHeuristic列表转换为ExcelOutputEntity列表
      * @param hyperHeuristicItems 评分算法运行结果
      * @return Excel 元信息列表
      */
-    public static List<ExcelOutputEntity> convertToExcelEntities(List<ExtractScoreUtils.ExtractScoreItemByHyperHeuristic> hyperHeuristicItems) {
+    public static List<ExcelOutputEntity> convertHyperHeuristicToExcelEntities(List<ExtractScoreUtils.ExtractScoreItemByHyperHeuristic> hyperHeuristicItems) {
         List<ExcelOutputEntity> excelEntities = new ArrayList<>();
 
         for (ExtractScoreUtils.ExtractScoreItemByHyperHeuristic hyperHeuristicItem : hyperHeuristicItems) {
@@ -73,6 +74,41 @@ public class ExcelUtils {
             }
         }
 
+        return excelEntities;
+    }
+
+    public static List<ExcelOutputEntity> convertProblemDomainToExcelEntities(List<ExtractScoreUtils.ExtractScoreItemByProblemDomain> problemDomainItems){
+
+        List<ExcelOutputEntity> excelEntities = new ArrayList<>();
+        for (ExtractScoreUtils.ExtractScoreItemByProblemDomain problemDomainItem : problemDomainItems) {
+            String problemDomain = problemDomainItem.getProblemDomainName();
+            String hyperHeuristicName = problemDomainItem.getHyperHeuristicName();
+            double problemScore = problemDomainItem.getProblemDomainScore();
+            for (ExtractScoreUtils.ExtractScoreItemByInstance instanceItem : problemDomainItem.getInstanceScoreList()) {
+                ExcelOutputEntity excelEntity = new ExcelOutputEntity();
+                excelEntity.setHyperHeuristicName(hyperHeuristicName);
+                excelEntity.setProblemDomain(problemDomain);
+                excelEntity.setInstance(instanceItem.getInstanceName());
+                excelEntity.setBestValue(instanceItem.getInstanceValue());
+                excelEntity.setInstanceScore(instanceItem.getInstanceScore());
+                excelEntity.setProblemScore(problemScore);
+                excelEntities.add(excelEntity);
+            }
+        }
+        return excelEntities;
+    }
+
+    public static List<ExcelOutputEntity> convertInstanceToExcelEntities(List<ExtractScoreUtils.ExtractScoreItemByInstance> instanceItems){
+        ArrayList<ExcelOutputEntity> excelEntities = new ArrayList<>();
+        for (ExtractScoreUtils.ExtractScoreItemByInstance instanceItem : instanceItems) {
+            ExcelOutputEntity excelOutputEntity = new ExcelOutputEntity();
+            excelOutputEntity.setHyperHeuristicName(instanceItem.getHyperHeuristicName());
+            excelOutputEntity.setProblemDomain(instanceItem.getProblemDomainName());
+            excelOutputEntity.setInstance(instanceItem.getInstanceName());
+            excelOutputEntity.setBestValue(instanceItem.getInstanceValue());
+            excelOutputEntity.setInstanceScore(instanceItem.getInstanceScore());
+            excelEntities.add(excelOutputEntity);
+        }
         return excelEntities;
     }
 }

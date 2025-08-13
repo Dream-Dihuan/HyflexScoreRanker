@@ -26,7 +26,7 @@ public class Controller {
      * @return 实例评分结果
      * @throws Exception
      */
-    public static void ScoringByInstance (String ProblemDomainName,String InstanceName) throws Exception {
+    public static List<ExtractScoreUtils.ExtractScoreItemByInstance> ScoringByInstance (String ProblemDomainName,String InstanceName) throws Exception {
         List<HyperHeuristicInfo> compareData = new ArrayList<>();
         String jsonString = new String(Files.readAllBytes(Paths.get(JSON_FILE_PATH)));
 
@@ -37,6 +37,7 @@ public class Controller {
         ArrayList<ExtractScoreUtils.ExtractScoreItemByInstance> sortInstance = SortUtils.sortExtractScoreItemsByScore(extractScoreItemByInstances, sortMethod(ProblemDomainName));
         List<ExtractScoreUtils.ExtractScoreItemByInstance> result = ScoringUtils.ScoringInstanceScoreList(sortInstance);
         System.out.println(result);
+        return result;
     }
 
     /**
@@ -94,9 +95,19 @@ public class Controller {
 
     public static void main(String[] args) throws Exception {
 
-
+        // hyper heuristic层面
         List<ExtractScoreUtils.ExtractScoreItemByHyperHeuristic> extractScoreItemByHyperHeuristics = ScoringByHyperHeuristic();
-        List<ExcelOutputEntity> excelOutputEntities = ExcelUtils.convertToExcelEntities(extractScoreItemByHyperHeuristics);
+        List<ExcelOutputEntity> excelOutputEntities = ExcelUtils.convertHyperHeuristicToExcelEntities(extractScoreItemByHyperHeuristics);
         generateExcelFile(excelOutputEntities, configuration.EXCEL_OUTPUT_PATH);
+
+        // problem domain 层面
+//        List<ExtractScoreUtils.ExtractScoreItemByProblemDomain> extractScoreItemByProblemDomainList = ScoringByProblemDomain("VRP");
+//        List<ExcelOutputEntity> excelOutputEntities = ExcelUtils.convertProblemDomainToExcelEntities(extractScoreItemByProblemDomainList);
+//        generateExcelFile(excelOutputEntities, configuration.EXCEL_OUTPUT_PATH);
+
+        // instance 层面
+//        List<ExtractScoreUtils.ExtractScoreItemByInstance> extractScoreItemByInstances = ScoringByInstance("TSP", "pr299-hyflex-0");
+//        List<ExcelOutputEntity> excelOutputEntities = ExcelUtils.convertInstanceToExcelEntities(extractScoreItemByInstances);
+//        generateExcelFile(excelOutputEntities, configuration.EXCEL_OUTPUT_PATH);
     }
 }

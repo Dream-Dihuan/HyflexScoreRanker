@@ -54,9 +54,9 @@ public class TestValueAddition {
 
         List<InstanceInfo> LAST_RL_VRP_InstanceInfoList = Arrays.asList(
                 new InstanceInfo("Homberger/RC/RC2-10-1", 61675.303793195824),
-                new InstanceInfo("Solomon/R/R101", 13356.051256670911),
+                new InstanceInfo("Solomon/R/R101-2", 13356.051256670911),
                 new InstanceInfo("Homberger/C/C1-10-1", 145784.69975564512),
-                new InstanceInfo("Solomon/R/R101", 20655.97640175985),
+                new InstanceInfo("Solomon/R/R101-1", 20655.97640175985),
                 new InstanceInfo("Homberger/RC/RC1-10-5", 147438.31458381517)
         );
 

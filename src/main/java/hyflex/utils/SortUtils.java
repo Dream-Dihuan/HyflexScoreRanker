@@ -31,7 +31,6 @@ public class SortUtils {
             // 降序排序
             sortedList.sort(Comparator.comparingDouble(ExtractScoreUtils.ExtractScoreItemByInstance::getInstanceValue).reversed());
         }
-
         return sortedList;
     }
 
